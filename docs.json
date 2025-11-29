@@ -4228,10 +4228,6 @@
     },
     "redirects": [
       {
-        "source": "/en/guides/workflow/node/start",
-        "destination": "/en/use-dify/getting-started/key-concepts#workflow"
-      },
-      {
         "source": "/en/guides/workflow/node/user-input",
         "destination": "/en/use-dify/nodes/user-input"
       },
