@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Download analysis artifacts
         uses: actions/download-artifact@v4
+        continue-on-error: true
+        id: download-artifacts
         with:
           name: docs-sync-analysis-${{ github.event.workflow_run.id }}
           path: /tmp/analysis
@@ -36,6 +38,13 @@ jobs:
         id: load-analysis
         run: |
           echo "Loading validated analysis from secure workflow..."
+
+          # Check if artifact was successfully downloaded
+          if [ "${{ steps.download-artifacts.outcome }}" != "success" ]; then
+            echo "❌ Artifact download failed - analyze workflow may have skipped this PR (no source changes or PR type not 'source')"
+            echo "should_proceed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
 
           # Check if sync_plan.json exists (created by analyze workflow)
           if [ ! -f "/tmp/analysis/sync_plan.json" ]; then
